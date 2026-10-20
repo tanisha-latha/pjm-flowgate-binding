@@ -18,6 +18,8 @@ NIGHT = [22, 23, 0, 1, 2, 3, 4, 5, 6]
 
 
 def share_by_year(t):
+    # Jan to Aug only, so 2026 (which ends in August) is compared like for like
+    t = t[t.month <= 8]
     rows = []
     for th in THRESHOLDS:
         for a in AREAS:
@@ -35,12 +37,12 @@ def chart_by_year(shares):
         bars = ax.bar(x, s[a], width=w - 0.02, color=AREA_COLOURS[a], label=AREAS[a]["label"])
         for b, v in zip(bars, s[a]):
             ax.text(b.get_x() + b.get_width() / 2, v + 0.008, f"{v:.0%}", ha="center", fontsize=8.5, color=INK)
-    ax.set_xticks(np.arange(len(s)), [f"{y}" + (" (Jan-Aug)" if y == 2026 else "") for y in s.index])
+    ax.set_xticks(np.arange(len(s)), [str(y) for y in s.index])
     pct(ax)
     ax.set_ylim(0, s.values.max() * 1.18)
     ax.grid(axis="x", visible=False)
-    ax.set_ylabel(f"share of hours with spread > ${THRESHOLD:.0f}")
-    ax.set_title("Congestion rose every year in all three areas")
+    ax.set_ylabel(f"share of Jan-Aug hours with spread > ${THRESHOLD:.0f}")
+    ax.set_title("Congestion jumped in 2026 in all three areas (January to August)")
     ax.legend(loc="upper left", fontsize=8.5)
     save(fig, "01_congested_share_by_year.png")
 
@@ -135,7 +137,7 @@ def main():
 
     profiles = pd.concat({a: t.groupby(["year", "hour"])[f"ev_{a}"].mean().unstack() for a in AREAS})
     profiles.round(3).to_csv(RESULTS / "hourly_profile_by_year.csv")
-    means = t.groupby("year")[["load_dom", "load_bge", "load_comed", "solar_south", "wind_west", "gen_nuclear"]].mean()
+    means = t[t.month <= 8].groupby("year")[["load_dom", "load_bge", "load_comed", "solar_south", "wind_west", "gen_nuclear"]].mean()
     means.round(0).to_csv(RESULTS / "fundamentals_by_year.csv")
 
     print(shares[shares.threshold == THRESHOLD].pivot(index="year", columns="area", values="share").round(3))
