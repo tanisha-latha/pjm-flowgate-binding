@@ -23,7 +23,7 @@ def style():
         "axes.spines.top": False, "axes.spines.right": False,
         "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.6,
         "xtick.color": MUTED, "ytick.color": MUTED, "xtick.major.size": 0, "ytick.major.size": 0,
-        "legend.frameon": False, "lines.linewidth": 2,
+        "legend.frameon": False, "lines.linewidth": 2, "axes.axisbelow": True,
     })
 
 

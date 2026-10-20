@@ -1,0 +1,7 @@
+horizon,model,baltimore,richmond,chicago
+hour ahead,baseline: it was congested last hour,0.834,0.826,0.84
+hour ahead,logistic regression: calendar + fundamentals + recent state,0.907,0.906,0.898
+day ahead,baseline: same hour yesterday,0.695,0.669,0.632
+day ahead,calendar only,0.663,0.646,0.635
+day ahead,boosted trees: calendar + yesterday's fundamentals,0.692,0.73,0.658
+day ahead,boosted trees: + yesterday's congestion,0.765,0.753,0.695
